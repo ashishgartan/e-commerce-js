@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "name": "electronics",
+    "productIds": [1, 13]
+  },
+  {
+    "id": 2,
+    "name": "fashion",
+    "productIds": [2, 4]
+  },
+  {
+    "id": 3,
+    "name": "garden",
+    "productIds": [3, 14, 18]
+  },
+  {
+    "id": 4,
+    "name": "home",
+    "productIds": [5]
+  },
+  {
+    "id": 5,
+    "name": "automotive",
+    "productIds": [6, 11]
+  },
+  {
+    "id": 6,
+    "name": "sports",
+    "productIds": [7, 19]
+  },
+  {
+    "id": 7,
+    "name": "health",
+    "productIds": [8, 10, 16, 23]
+  },
+  {
+    "id": 8,
+    "name": "tools",
+    "productIds": [9]
+  },
+  {
+    "id": 9,
+    "name": "music",
+    "productIds": [12, 17]
+  },
+  {
+    "id": 10,
+    "name": "pet supplies",
+    "productIds": [20]
+  },
+  {
+    "id": 11,
+    "name": "office",
+    "productIds": [15, 21, 22, 24]
+  }
+]
