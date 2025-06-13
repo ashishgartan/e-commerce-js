@@ -1,72 +1,83 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton } from '@mui/material';
-import { useState, useEffect } from 'react';
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton } from "@mui/material";
+import { useState, useEffect } from "react";
 
 function CartProduct({ product, updateQuantity, removeFromCart }) {
-    const { id, title, price, mainImage } = product;
-    const [quantity, setQuantity] = useState(product.quantity);
+  const { id, title, price, mainImage } = product;
+  const [quantity, setQuantity] = useState(product.quantity);
 
-    // Keep local quantity in sync if product.quantity changes externally
-    useEffect(() => {
-        setQuantity(product.quantity);
-    }, [product.quantity]);
+  useEffect(() => {
+    setQuantity(product.quantity);
+  }, [product.quantity]);
 
-    const handleDecrease = () => {
-        if (quantity > 1) {
-            const newQty = quantity - 1;
-            setQuantity(newQty);
-            updateQuantity(id, newQty);
-        }
-    };
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      const newQty = quantity - 1;
+      setQuantity(newQty);
+      updateQuantity(id, newQty);
+    }
+  };
 
-    const handleIncrease = () => {
-        const newQty = quantity + 1;
-        setQuantity(newQty);
-        updateQuantity(id, newQty);
-    };
+  const handleIncrease = () => {
+    const newQty = quantity + 1;
+    setQuantity(newQty);
+    updateQuantity(id, newQty);
+  };
 
-    const handleRemove = () => {
-        removeFromCart(id);
-    };
+  const handleRemove = () => {
+    removeFromCart(id);
+  };
 
-    return (
-        <div className="bg-white shadow-lg rounded-xl p-4 flex flex-col items-center text-center">
-            <img
-                src={mainImage}
-                alt={title}
-                className="w-32 h-32 object-cover mb-4 rounded-md"
-            />
-            <h2 className="text-lg font-semibold mb-2">{title}</h2>
-            <p className="text-gray-600">Price: ₹{price}</p>
-            <div className="flex items-center space-x-3 my-3">
-                <button
-                    className="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition"
-                    onClick={handleDecrease}
-                >
-                    −
-                </button>
+  return (
+    <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start justify-between p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition">
+      {/* Product Image */}
+      <img
+        src={mainImage}
+        alt={title}
+        className="w-32 h-32 object-cover rounded-lg border"
+      />
 
-                <span className="text-lg font-medium">{quantity}</span>
+      {/* Details */}
+      <div className="flex-1 flex flex-col items-center sm:items-start text-center sm:text-left">
+        <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+        <p className="text-gray-500 mt-1">Price: ₹{price}</p>
 
-                <button
-                    className="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-green-600 transition"
-                    onClick={handleIncrease}
-                >
-                    +
-                </button>
-            </div>
+        {/* Quantity Controls */}
+        <div className="flex items-center gap-3 mt-3">
+          <button
+            className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 text-lg font-bold text-red-600 transition"
+            onClick={handleDecrease}
+          >
+            −
+          </button>
 
-            <p className="text-green-600 font-medium mt-1">
-                Total: ₹{(price * quantity).toFixed(2)}
-            </p>
-            <IconButton
-                className="mt-3 text-red-500 hover:text-red-700"
-                onClick={handleRemove}
-            >
-                <DeleteIcon />
-            </IconButton>
+          <span className="text-lg font-medium">{quantity}</span>
+
+          <button
+            className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 text-lg font-bold text-green-600 transition"
+            onClick={handleIncrease}
+          >
+            +
+          </button>
         </div>
-    );
+
+        {/* Total */}
+        <p className="text-green-600 font-medium mt-2">
+          Total: ₹{(price * quantity).toFixed(2)}
+        </p>
+      </div>
+
+      {/* Delete Button */}
+      <div className="mt-3 sm:mt-0 sm:ml-4">
+        <IconButton
+          onClick={handleRemove}
+          className="!text-red-500 hover:!text-red-700 transition"
+        >
+          <DeleteIcon />
+        </IconButton>
+      </div>
+    </div>
+  );
 }
 
 export default CartProduct;
