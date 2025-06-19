@@ -1,29 +1,34 @@
+// 🔧 Basic Imports
 const express = require("express");
 const cors = require("cors");
+const morgan = require("morgan");
+const connectDB = require("./db");
+
+// 🚀 Initialize App
 const app = express();
 const port = 3000;
-const morgan = require("morgan");
 
-const categoryRoutes = require("./routes/categoryRoutes");
-const productRoutes = require("./routes/productRoutes");
-const cartRoutes = require("./routes/cartRoutes");
-const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
+// 🔌 Connect to MongoDB
+connectDB();
 
-app.use(cors());
-// Use morgan with 'dev' preset for concise colored logs in console
-app.use(morgan("dev"));
+// 🧩 Middleware
+app.use(cors()); // 🌐 Enable Cross-Origin Requests
+app.use(express.json()); // 📦 Parse JSON bodies
+app.use(morgan("dev")); // 📋 Log HTTP requests
 
-app.use("/categories", categoryRoutes);
-app.use("/products", productRoutes);
-app.use("/cart", cartRoutes);
-app.use("/auth", authRoutes);
-app.use("/user", userRoutes);
+// 🛣️ Routes
+app.use("/api/user", require("./routes/userRoutes")); // 👤 User routes
+app.use("/api/category", require("./routes/categoryRoutes")); // 🗂️ Category routes
+app.use("/api/product", require("./routes/productRoutes")); // 🛍️ Product routes
+app.use("/api/cart", require("./routes/cartRoutes")); // 🛒 Cart routes
+app.use("/api/auth", require("./routes/authRoutes")); // 🔐 Auth routes
 
+// 🏠 Root Endpoint
 app.get("/", (req, res) => {
-  res.send("Home Page");
+  res.send("📦 E-commerce API is running...");
 });
 
+// 🟢 Start Server
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`✅ Server running at: http://localhost:${port}`);
 });

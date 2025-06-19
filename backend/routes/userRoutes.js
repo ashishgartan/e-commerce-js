@@ -1,39 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("fs");
-const path = require("path");
+const userController = require("../controllers/userContoller");
 
-const filePath = path.join(__dirname, "../database/users.json");
+// GET /user — Get all users
+router.get("/", userController.getAllUsers);
 
-function readUsers(res, callback) {
-  fs.readFile(filePath, "utf8", (err, data) => {
-    if (err) {
-      console.error("❌ Error reading users file:", err);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-    try {
-      const users = JSON.parse(data);
-      callback(users);
-    } catch (parseErr) {
-      console.error("❌ Error parsing users file:", parseErr);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  });
-}
-// 🔍 GET /users/id/:id
+// GET /user/:id — Get user by ID
+router.get("/:id", userController.getUserById);
 
-router.get("/id/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  console.log(`🔎 Fetching user with ID ${id}`);
+// PUT /user/:id — Update user by ID
+router.put("/:id", userController.updateUser);
 
-  readUsers(res, (users) => {
-    const user = users.find((u) => u.id === id);
-    if (!user) {
-      console.warn(`⚠️ User ID ${id} not found`);
-      return res.status(404).json({ error: "User not found" });
-    }
-    res.json(user);
-  });
-});
+// DELETE /user/:id — Delete user by ID
+router.delete("/:id", userController.deleteUser);
 
 module.exports = router;
