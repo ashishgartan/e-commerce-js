@@ -1,4 +1,3 @@
-// src/components/OrderSummary.jsx
 function OrderSummary({ cartProducts }) {
   const total = cartProducts.reduce((sum, p) => sum + p.price * p.quantity, 0);
 
@@ -12,7 +11,7 @@ function OrderSummary({ cartProducts }) {
         <>
           <ul className="space-y-2 text-gray-700">
             {cartProducts.map((p) => (
-              <li key={p.id} className="flex justify-between">
+              <li key={p.id || p._id} className="flex justify-between">
                 <span className="truncate w-3/5">
                   {p.title.slice(0, 20)}...
                 </span>

@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import ProductList from "./ProductList";
 
 function CategoryProduct() {
-  const { category } = useParams();
+  const { categoryId } = useParams();
+  const [categoryName, setCategoryName] = useState("");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
@@ -15,10 +16,11 @@ function CategoryProduct() {
       setLoading(true);
       try {
         const res = await fetch(
-          `http://localhost:3000/products/pagination/category/${category}?page=${pageNumber}&limit=${pageSize}`
+          `http://localhost:3000/api/product?categoryId=${categoryId}&page=${pageNumber}&limit=${pageSize}`
         );
         const data = await res.json();
-        setProducts(data.products);
+
+        setProducts(data.products || []);
         setTotalPages(Math.ceil(data.total / pageSize));
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -27,9 +29,22 @@ function CategoryProduct() {
         setLoading(false);
       }
     };
-
+    const fetchCategoryName = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/category/${categoryId}`
+        );
+        const data = await res.json();
+        console.log("Category Data:", data);
+        setCategoryName(data.name || "Unknown Category");
+      } catch (error) {
+        console.error("Failed to fetch category name:", error);
+        setCategoryName("Unknown Category");
+      }
+    };
+    fetchCategoryName();
     fetchCategoryProducts();
-  }, [category, pageNumber]);
+  }, [categoryId, pageNumber]);
 
   if (loading) {
     return (
@@ -44,7 +59,7 @@ function CategoryProduct() {
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <h2 className="text-3xl font-bold mb-6 text-gray-800 capitalize border-b pb-2 border-gray-300">
-        {category} Products
+        {categoryName} Products
       </h2>
 
       <ProductList products={products} />

@@ -12,11 +12,15 @@ import ContactUs from "./components/ContactUs.jsx";
 import PaymentPage from "./components/PaymentPage.jsx";
 import CategoryProducts from "./components/CategoryProducts.jsx";
 import ProfilePage from "./components/ProfilePage.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx"; // ✅ Add this
+import ProtectedRoute from "./components/ProtectedRoute.jsx"; // ✅ Add
+import AdminPage from "./components/AdminPage.jsx";
+import Navbar from "./components/Navbar.jsx";
+import Footer from "./components/Footer.jsx";
 
 function App() {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
@@ -27,8 +31,10 @@ function App() {
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<Signup />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/category/:category" element={<CategoryProducts />} />
+        <Route path="/category/:categoryId" element={<CategoryProducts />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/admin" element={<AdminPage />} />
+
         {/* ✅ Protected Routes */}
 
         <Route
@@ -48,7 +54,7 @@ function App() {
           }
         />
         <Route
-          path="/profile/:id"
+          path="/profile/:userId"
           element={
             <ProtectedRoute>
               <ProfilePage />
@@ -59,6 +65,7 @@ function App() {
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

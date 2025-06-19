@@ -23,8 +23,6 @@ function Contact() {
 
   return (
     <>
-      <Navbar />
-
       <main className="max-w-2xl mx-auto px-4 py-10 min-h-screen bg-gray-50">
         <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
           Contact Us

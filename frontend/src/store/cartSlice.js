@@ -8,13 +8,13 @@ export const fetchCartFromBackend = createAsyncThunk(
     const state = thunkAPI.getState();
     const user = state.user?.user;
 
-    if (!user || !user.id) {
+    if (!user || !user._id) {
       console.log("❌ User not logged in — skipping fetchCartFromBackend");
       return []; // return empty cart
     }
 
-    console.log(`🔄 Fetching cart from backend for user ID: ${user.id}`);
-    const response = await fetch(`http://localhost:3000/cart/${user.id}`);
+    console.log(`🔄 Fetching cart from backend for user ID: ${user._id}`);
+    const response = await fetch(`http://localhost:3000/api/cart/${user._id}`);
 
     if (!response.ok) throw new Error("Failed to fetch cart");
 
@@ -31,7 +31,7 @@ export const syncCartToBackend = createAsyncThunk(
     const user = state.user?.user; // 👈 Get logged-in user info
 
     // 🛑 If user not logged in, skip syncing
-    if (!user || !user.id) {
+    if (!user || !user._id) {
       console.log("❌ User not logged in — skipping cart sync.");
       return;
     }
@@ -39,11 +39,14 @@ export const syncCartToBackend = createAsyncThunk(
     console.log("✅ User logged in — syncing cart to backend...");
 
     try {
-      const response = await fetch(`http://localhost:3000/cart/${user.id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: cartItems }),
-      });
+      const response = await fetch(
+        `http://localhost:3000/api/cart/${user._id}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items: cartItems }),
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to sync cart");
 
@@ -71,22 +74,22 @@ let cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       console.log("Inside addToCart reducer");
-      const existing = state.items.find((item) => item?.id === action.payload);
+      const existing = state.items.find((item) => item?._id === action.payload);
       if (existing) {
         existing.quantity += 1; // Increase quantity if item already in cart
       } else {
-        state.items.push({ id: action.payload, quantity: 1 }); // Add new item
+        state.items.push({ _id: action.payload, quantity: 1 }); // Add new item
       }
     },
 
     removeFromCart: (state, action) => {
       console.log("Inside removeFromCart reducer");
-      state.items = state.items.filter((item) => item.id !== action.payload);
+      state.items = state.items.filter((item) => item._id !== action.payload);
     },
 
     reduceQuantityFromCart: (state, action) => {
       console.log("Inside reduceQuantityFromCart reducer");
-      const existing = state.items.find((item) => item.id === action.payload);
+      const existing = state.items.find((item) => item._id === action.payload);
       if (existing) {
         existing.quantity -= 1;
       }

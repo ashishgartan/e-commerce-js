@@ -4,7 +4,6 @@ import Footer from "./Footer";
 function About() {
   return (
     <>
-      <Navbar />
       <main className="max-w-4xl mx-auto p-6">
         <section className="bg-white rounded-xl shadow-md p-8 transition hover:shadow-lg">
           <h1 className="text-4xl font-extrabold text-blue-700 mb-6 border-b pb-2 border-gray-200">

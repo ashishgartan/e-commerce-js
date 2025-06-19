@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { login } from "../store/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { syncCartToBackend } from "../store/cartSlice";
-import { useSelector } from "react-redux";
 
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
-  const [formData, setFormData] = useState({ username: "", password: "" });
+
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [authMessage, setAuthMessage] = useState("");
   const [authMessageColor, setAuthMessageColor] = useState("green");
 
@@ -24,7 +24,7 @@ function Login() {
     e.preventDefault();
     setAuthMessage("");
 
-    fetch("http://localhost:3000/auth/login", {
+    fetch("http://localhost:3000/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -41,13 +41,11 @@ function Login() {
         setAuthMessage("Login successful.");
         setAuthMessageColor("green");
         dispatch(syncCartToBackend(cart.items));
-        // Redirect to home after a short delay
-        // This allows the message to be displayed before navigating
         setTimeout(() => navigate("/"), 1000);
       })
       .catch((error) => {
         console.error(error);
-        setAuthMessage("Invalid username or password.");
+        setAuthMessage("Invalid email or password.");
         setAuthMessageColor("red");
       });
   };
@@ -69,11 +67,11 @@ function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-gray-700">Username</label>
+            <label className="block text-gray-700">Email</label>
             <input
-              type="text"
-              name="username"
-              value={formData.username}
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
               required

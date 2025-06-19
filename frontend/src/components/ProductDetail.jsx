@@ -4,15 +4,19 @@ import Product from "./Product";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { useDispatch, useSelector } from "react-redux";
-import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
-import { fetchCartFromBackend } from "../store/cartSlice"; // add this
 
 import {
   addToCart,
   removeFromCart,
   reduceQuantityFromCart,
   syncCartToBackend,
+  fetchCartFromBackend,
 } from "../store/cartSlice";
+
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { IconButton } from "@mui/material";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -21,30 +25,26 @@ function ProductDetail() {
   const [mainImage, setMainImage] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
   const cartLoaded = useSelector((state) => state.cart.cartLoaded);
 
-  const limit = 10; // items per page
+  const limit = 10;
   const itemInCart = product
-    ? cartItems.find((item) => item.id === product.id)
+    ? cartItems.find((item) => item._id === product._id)
     : null;
   const quantity = itemInCart?.quantity || 0;
 
-  // Load cart only once
   useEffect(() => {
     if (!cartLoaded) {
-      console.log("⛳ Fetching cart from backend");
-      console.log("Inside useEffect of ProductDetail");
       dispatch(fetchCartFromBackend());
     }
   }, [cartLoaded, dispatch]);
 
-  // Load product when ID changes
   useEffect(() => {
     if (!id) return;
-    console.log("Fetching product with ID:", id);
-    fetch(`http://localhost:3000/products/id/${id}`)
+    fetch(`http://localhost:3000/api/product/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
@@ -54,17 +54,14 @@ function ProductDetail() {
       .catch((err) => console.error("❌ Error fetching product:", err));
   }, [id]);
 
-  // Fetch similar products when product changes
   useEffect(() => {
-    console.log("Fetching similar products for category:", product?.category);
     if (!product?.category) return;
     fetchSimilarProducts(product.category, 1);
   }, [product]);
 
-  // Fetch similar products
   const fetchSimilarProducts = (category, page) => {
     fetch(
-      `http://localhost:3000/products/pagination/category/${category}?page=${page}&limit=${limit}`
+      `http://localhost:3000/api/product/?category=${category}&page=${page}&limit=${limit}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -74,7 +71,6 @@ function ProductDetail() {
       .catch((err) => console.error("Error fetching similar products:", err));
   };
 
-  // Handle page change
   const handlePageChange = (direction) => {
     const newPage = currentPage + direction;
     if (product && newPage >= 1 && newPage <= totalPages) {
@@ -88,39 +84,41 @@ function ProductDetail() {
   };
 
   const handleAddToCart = () => {
-    const updatedCart = [...cartItems, { id: product.id, quantity: 1 }];
-    dispatch(addToCart(product.id));
+    const updatedCart = [...cartItems, { _id: product._id, quantity: 1 }];
+    dispatch(addToCart(product._id));
     updateBackend(updatedCart);
   };
 
   const handleIncrease = () => {
     const updatedCart = cartItems.map((item) =>
-      item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
     );
-    dispatch(addToCart(product.id));
+    dispatch(addToCart(product._id));
     updateBackend(updatedCart);
   };
 
   const handleDecrease = () => {
     const updatedCart = cartItems
       .map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity - 1 } : item
+        item._id === product._id
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
       )
       .filter((item) => item.quantity > 0);
-    dispatch(reduceQuantityFromCart(product.id));
+    dispatch(reduceQuantityFromCart(product._id));
     updateBackend(updatedCart);
   };
 
   const handleRemoveFromCart = () => {
-    const updatedCart = cartItems.filter((item) => item.id !== product.id);
-    dispatch(removeFromCart(product.id));
+    const updatedCart = cartItems.filter((item) => item._id !== product._id);
+    dispatch(removeFromCart(product._id));
     updateBackend(updatedCart);
   };
+
   if (!product) return <p className="text-center mt-10">Loading product...</p>;
 
   return (
     <>
-      <Navbar />
       <div className="flex flex-col md:flex-row gap-8 p-10 max-w-6xl mx-auto">
         {/* Thumbnails */}
         <div className="flex md:flex-col gap-4">
@@ -153,32 +151,49 @@ function ProductDetail() {
             <strong>Category:</strong> {product.category}
           </p>
           <p className="text-gray-600">{product.description}</p>
+
+          {/* Quantity Buttons */}
           {itemInCart ? (
             <div className="flex items-center space-x-3 my-3">
-              {/* Decrease and Increase buttons for quantity */}
               {quantity === 1 ? (
-                <button
-                  className="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                <IconButton
                   onClick={handleRemoveFromCart}
+                  sx={{
+                    color: "red",
+                    "&:hover": {
+                      color: "#b91c1c",
+                    },
+                  }}
                 >
-                  <DeleteForeverRoundedIcon />
-                </button>
+                  <DeleteIcon />
+                </IconButton>
               ) : (
-                <button
-                  className="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                <IconButton
                   onClick={handleDecrease}
+                  sx={{
+                    color: "red",
+                    "&:hover": {
+                      color: "#b91c1c",
+                    },
+                  }}
                 >
-                  −
-                </button>
+                  <RemoveIcon />
+                </IconButton>
               )}
 
               <span className="text-lg font-medium">{quantity}</span>
-              <button
-                className="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-green-600"
+
+              <IconButton
                 onClick={handleIncrease}
+                sx={{
+                  color: "green",
+                  "&:hover": {
+                    color: "#047857",
+                  },
+                }}
               >
-                +
-              </button>
+                <AddIcon />
+              </IconButton>
             </div>
           ) : (
             <button
@@ -202,7 +217,7 @@ function ProductDetail() {
             <h1 className="text-xl font-semibold mb-2">
               People also like it...
             </h1>
-            {/* Pagination Controls */}
+
             <div className="flex justify-center mt-4 gap-4">
               <button
                 onClick={() => handlePageChange(-1)}
@@ -220,11 +235,12 @@ function ProductDetail() {
                 Next
               </button>
             </div>
+
             <div className="overflow-x-auto whitespace-nowrap p-4 bg-white rounded-md shadow-xl">
               {similarProducts
-                .filter((p) => p.id !== parseInt(id))
+                .filter((p) => p._id !== id)
                 .map((p) => (
-                  <div key={p.id} className="inline-block w-64 mr-4">
+                  <div key={p._id} className="inline-block w-64 mr-4">
                     <Product product={p} />
                   </div>
                 ))}
@@ -232,7 +248,6 @@ function ProductDetail() {
           </>
         )}
       </div>
-      <Footer />
     </>
   );
 }

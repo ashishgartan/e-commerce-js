@@ -5,7 +5,7 @@ function CategoryBar() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/categories")
+    fetch("http://localhost:3000/api/category")
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch(console.error);
@@ -16,8 +16,8 @@ function CategoryBar() {
       <div className="flex gap-3 sm:gap-4 items-center whitespace-nowrap min-w-full">
         {categories.map((category) => (
           <Link
-            key={category.id}
-            to={`/category/${category.name}`}
+            key={category._id} // ✅ Changed from category.id
+            to={`/category/${category._id}`}
             className="bg-indigo-100 text-indigo-700 text-sm sm:text-base px-4 py-2 rounded-full hover:bg-indigo-200 transition font-medium"
           >
             {category.name.charAt(0).toUpperCase() + category.name.slice(1)}

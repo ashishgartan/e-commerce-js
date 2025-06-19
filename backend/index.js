@@ -8,6 +8,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 app.use(cors());
 // Use morgan with 'dev' preset for concise colored logs in console
@@ -17,6 +18,7 @@ app.use("/categories", categoryRoutes);
 app.use("/products", productRoutes);
 app.use("/cart", cartRoutes);
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("Home Page");

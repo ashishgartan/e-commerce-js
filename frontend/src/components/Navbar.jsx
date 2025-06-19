@@ -17,7 +17,9 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.user);
+  console.log("User in Navbar:", user);
+  const isLoggedIn = useSelector((state) => state.user.loggedIn);
   const cartItems = useSelector((state) => state.cart.items || []);
 
   const handleLogout = () => {
@@ -50,13 +52,16 @@ export default function Navbar() {
             <ShoppingCartIcon className="cursor-pointer" />
           </Badge>
         </Link>
-        {user && user.loggedIn ? (
+        {user && isLoggedIn ? (
           <>
             <Avatar
               alt={user.name || "User"}
               src={user.profile || "https://picsum.photos/200/300"}
               sx={{ width: 32, height: 32, marginLeft: 1, marginRight: 1 }}
-              onClick={() => navigate("/profile/" + user.id)}
+              onClick={() => {
+                navigate("/profile/" + user._id);
+                console.log("Navigating to profile:", user._id);
+              }}
               className="cursor-pointer hover:opacity-80"
               title="Profile"
             />

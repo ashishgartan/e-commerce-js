@@ -13,17 +13,19 @@ function Checkout() {
     if (!cart.length) return setCartProducts([]);
     Promise.all(
       cart.map((item) =>
-        fetch(`http://localhost:3000/products/id/${item.id}`)
+        fetch(`http://localhost:3000/api/product/${item._id}`)
           .then((res) => res.json())
-          .then((product) => ({ ...product, quantity: item.quantity }))
+          .then((product) => ({
+            ...product,
+            id: product._id, // normalize `_id` to `id`
+            quantity: item.quantity,
+          }))
       )
     ).then(setCartProducts);
   }, [cart]);
 
   return (
     <>
-      <Navbar />
-
       <div className="max-w-6xl mx-auto px-4 py-8 min-h-screen bg-gray-50">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Shipping Info */}

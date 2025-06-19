@@ -4,20 +4,7 @@
     "username": "emmaj",
     "password": "emmajpass1",
     "role": "admin",
-    "cart": [
-      {
-        "id": 1,
-        "quantity": 5
-      },
-      {
-        "id": 5,
-        "quantity": 2
-      },
-      {
-        "id": 2,
-        "quantity": 1
-      }
-    ]
+    "cart": []
   },
   {
     "id": 2,
@@ -108,5 +95,21 @@
     "password": "$2b$10$gD9yODp1c21xL4U8LkIhEeWaTH78UoAi/FXfoXSthObRF2MY4aaQS",
     "role": "user",
     "cart": []
+  },
+  {
+    "id": 1749648744388,
+    "username": "ashishgartan",
+    "password": "$2b$10$h29/qG.B8L.c3cSqQgZNoONdzTHCflJxT7RkHqzP3B4bEcK0DqokK",
+    "role": "user",
+    "cart": [
+      {
+        "id": 3,
+        "quantity": 3
+      },
+      {
+        "id": 4,
+        "quantity": 1
+      }
+    ]
   }
 ]
