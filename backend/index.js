@@ -22,6 +22,8 @@ app.use("/api/category", require("./routes/categoryRoutes")); // 🗂️ Categor
 app.use("/api/product", require("./routes/productRoutes")); // 🛍️ Product routes
 app.use("/api/cart", require("./routes/cartRoutes")); // 🛒 Cart routes
 app.use("/api/auth", require("./routes/authRoutes")); // 🔐 Auth routes
+app.use("/api/order", require("./routes/orderRoutes")); // 📦 Order routes
+app.use("/api/seller", require("./routes/sellerRoutes")); // 🛍️ Seller routes
 
 // 🏠 Root Endpoint
 app.get("/", (req, res) => {

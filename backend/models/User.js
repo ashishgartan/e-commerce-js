@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ["user", "admin"],
+      enum: ["user", "admin", "seller"],
       default: "user",
     },
 
@@ -36,12 +36,11 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
-    address: {
-      street: { type: String, default: "" },
-      city: { type: String, default: "" },
-      state: { type: String, default: "" },
-      zip: { type: String, default: "" },
-      country: { type: String, default: "" },
+    shippingInfo: {
+      fullName: String,
+      address: String,
+      city: String,
+      postalCode: String,
     },
 
     cart: [

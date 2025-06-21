@@ -14,6 +14,12 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
 
+  sellerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+
   price: {
     type: Number,
     required: true,
@@ -22,6 +28,15 @@ const productSchema = new mongoose.Schema({
   discountPercentage: {
     type: Number,
     default: 0,
+  },
+  limitPerCustomer: {
+    type: Number,
+    default: 0, // 0 means no limit
+  },
+
+  isActive: {
+    type: Boolean,
+    default: true, // Product is active by default
   },
 
   rating: {

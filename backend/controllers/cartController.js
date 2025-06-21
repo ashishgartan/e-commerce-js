@@ -1,32 +1,28 @@
 // controllers/cartController.js
 const User = require("../models/User");
 const Product = require("../models/Product");
+const { default: mongoose } = require("mongoose");
 
 // 🟢 Add to Cart
-exports.addToCart = async (req, res) => {
+exports.addCart = async (req, res) => {
   const { userId } = req.params;
-  const { productId, quantity } = req.body;
+  const items = req.body; // Expecting an array of { productId, quantity }
+  const cartArray = items.items || [];
 
   try {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ error: "User not found" });
-
-    const existingItem = user.cart.find((item) =>
-      item.product.equals(productId)
-    );
-
-    if (existingItem) {
-      existingItem.quantity += quantity;
-    } else {
-      user.cart.push({ product: productId, quantity });
-    }
-
+    console.log(cartArray);
+    cartArray.map((cartItem) => {
+      cartItem._id = new mongoose.Types.ObjectId(cartItem._id);
+      return cartItem;
+    });
+    console.log(cartArray);
+    user.cart = cartArray;
     await user.save();
     res.json(user.cart);
   } catch (err) {
-    res
-      .status(500)
-      .json({ error: "Failed to add to cart", details: err.message });
+    res.json({ error: "Failed to add to cart", details: err.message });
   }
 };
 
