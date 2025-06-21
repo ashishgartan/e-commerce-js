@@ -13,12 +13,13 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import StoreIcon from "@mui/icons-material/Store";
 
 export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
-  console.log("User in Navbar:", user);
   const isLoggedIn = useSelector((state) => state.user.loggedIn);
   const cartItems = useSelector((state) => state.cart.items || []);
 
@@ -54,6 +55,36 @@ export default function Navbar() {
         </Link>
         {user && isLoggedIn ? (
           <>
+            {user.role === "seller" ? (
+              <button
+                className="flex items-center space-x-1 cursor-pointer hover:text-slate-300 bg-transparent border-none"
+                onClick={() => {
+                  navigate(`/seller/sellerstore/${user._id}`);
+                }}
+                title="Seller Store"
+                style={{ background: "none", border: "none", padding: 0 }}
+              >
+                <StoreIcon titleAccess="sellerStorePanel" />
+                <span className="text-sm">Store</span>
+              </button>
+            ) : (
+              <></>
+            )}
+            {user.role === "admin" ? (
+              <button
+                className="flex items-center space-x-1 cursor-pointer hover:text-slate-300 bg-transparent border-none"
+                onClick={() => {
+                  navigate("/adminPanel");
+                }}
+                title="Admin Panel"
+                style={{ background: "none", border: "none", padding: 0 }}
+              >
+                <AdminPanelSettingsIcon titleAccess="AdminPanel" />
+                <span className="text-sm">Admin Panel</span>
+              </button>
+            ) : (
+              <></>
+            )}
             <Avatar
               alt={user.name || "User"}
               src={user.profile || "https://picsum.photos/200/300"}

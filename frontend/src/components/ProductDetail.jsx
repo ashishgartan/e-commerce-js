@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Product from "./Product";
 import Footer from "./Footer";
@@ -203,10 +203,11 @@ function ProductDetail() {
               Add to cart
             </button>
           )}
-
-          <button className="mt-6 mx-8 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Buy Now
-          </button>
+          <Link to={`/checkout/${product._id}`}>
+            <button className="mt-6 mx-8 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              Buy Now
+            </button>
+          </Link>
         </div>
       </div>
 

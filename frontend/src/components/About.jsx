@@ -28,7 +28,6 @@ function About() {
           </p>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

@@ -37,6 +37,7 @@ export const syncCartToBackend = createAsyncThunk(
     }
 
     console.log("✅ User logged in — syncing cart to backend...");
+    console.log("Cart items to sync:", cartItems);
 
     try {
       const response = await fetch(

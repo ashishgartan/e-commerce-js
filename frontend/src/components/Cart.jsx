@@ -105,7 +105,6 @@ function Cart() {
           )}
         </div>
       </section>
-      <Footer />
     </>
   );
 }

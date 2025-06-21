@@ -13,9 +13,15 @@ import PaymentPage from "./components/PaymentPage.jsx";
 import CategoryProducts from "./components/CategoryProducts.jsx";
 import ProfilePage from "./components/ProfilePage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx"; // ✅ Add
-import AdminPage from "./components/AdminPage.jsx";
+import AdminPage from "./components/adminComponents/AdminPanel.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
+import AdminPanel from "./components/adminComponents/AdminPanel.jsx";
+import SellerStore from "./components/sellerComponents/SellerStore.jsx";
+import SellerDashboard from "./components/sellerComponents/SellerDashBoard.jsx";
+import SellerOrders from "./components/sellerComponents/SellerOrders.jsx";
+import SellerProducts from "./components/sellerComponents/SellerProducts.jsx";
+import AddProductPage from "./components/sellerComponents/AddProductPage.jsx";
 
 function App() {
   return (
@@ -38,6 +44,22 @@ function App() {
         {/* ✅ Protected Routes */}
 
         <Route
+          path="/adminPanel"
+          element={
+            <ProtectedRoute>
+              <AdminPanel />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout/:productId"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/checkout"
           element={
             <ProtectedRoute>
@@ -46,18 +68,50 @@ function App() {
           }
         />
         <Route
-          path="/payment"
-          element={
-            <ProtectedRoute>
-              <PaymentPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/profile/:userId"
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/sellerStore/:userId"
+          element={
+            <ProtectedRoute>
+              <SellerStore />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard/:userId"
+          element={
+            <ProtectedRoute>
+              <SellerDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/products/:userId"
+          element={
+            <ProtectedRoute>
+              <SellerProducts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/products/add/:userId"
+          element={
+            <ProtectedRoute>
+              <AddProductPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/orders/:userId"
+          element={
+            <ProtectedRoute>
+              <SellerOrders />
             </ProtectedRoute>
           }
         />
